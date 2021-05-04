@@ -6,7 +6,7 @@
 
 <template>
   <div class="com-container">
-    <div class="com-chart" ref="seller_ref">seller组件</div>
+    <div class="com-chart" ref="seller_ref"></div>
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
       // 对图表初始化配置的控制
       const initOption = {
         title: {
-          text: "▎商家销售统计",
+          text: "▎ 商家销售统计",
           textStyle: {
             fontSize: 66,
           },
@@ -195,7 +195,7 @@ export default {
                 {
                     barWidth: titleFontSize,
                     itemStyle: {
-                        barBorderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0]
+                        borderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0]
                     }
                 }
             ]
@@ -207,5 +207,6 @@ export default {
   },
 };
 </script>
+
 <style lang="less" scoped>
 </style>

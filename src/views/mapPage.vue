@@ -1,21 +1,21 @@
 <!--
- 描述: 这个组件对应于路由 /sellerPage 而展示，在这个组件中，通过子组件注册的方式，要显示出seller.vue这个组件
+ 描述: 这个组件对应于路由 /mapPage 而展示，在这个组件中，通过子组件注册的方式，要显示出map.vue这个组件
  作者: Jack Chen
  日期: 2021-04-28
 -->
 
 <template>
   <div class="com-page">
-    <seller />
+    <Map />
   </div>
 </template>
 
 <script>
-import seller from "@/components/seller";
+import Map from "@/components/map";
 
 export default {
   components: {
-    seller,
+    Map
   },
   data() {
     return {};
