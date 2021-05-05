@@ -30,10 +30,10 @@ export default {
     };
   },
   created() {
-    // 在组件创建完成之后，进行回调函数的注册
-    this.$socket.registerCallBack("hotData", this.getData);
   },
   mounted() {
+    // 在组件创建完成之后，进行回调函数的注册
+    this.$socket.registerCallBack("hotData", this.getData);
     this.initChart();
     // this.getData();
     this.$socket.send({

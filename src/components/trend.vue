@@ -42,10 +42,10 @@ export default {
     };
   },
   created() {
-    // 在组件创建完成之后，进行回调函数的注册
-    this.$socket.registerCallBack("trendData", this.getData);
   },
   mounted() {
+    // 在组件创建完成之后，进行回调函数的注册
+    this.$socket.registerCallBack("trendData", this.getData);
     this.initChart();
     // this.getData();
     // 发送数据给服务端，告诉服务端，前端现在需要数据
