@@ -6,16 +6,16 @@
 
 <template>
   <div class="com-page">
-    <trend />
+    <Trend />
   </div>
 </template>
 
 <script>
-import trend from "@/components/trend";
+import Trend from "@/components/Trend";
 
 export default {
   components: {
-    trend,
+    Trend,
   },
   data() {
     return {};

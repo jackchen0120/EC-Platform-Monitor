@@ -6,16 +6,16 @@
 
 <template>
   <div class="com-page">
-    <rank />
+    <Rank />
   </div>
 </template>
 
 <script>
-import rank from "@/components/rank";
+import Rank from "@/components/Rank";
 
 export default {
   components: {
-    rank
+    Rank
   },
   data() {
     return {};

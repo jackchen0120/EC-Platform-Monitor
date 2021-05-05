@@ -1,5 +1,5 @@
 <!--
- 描述: 商家销量统计的横向柱状图
+ 描述: 商家销售统计的横向柱状图
  作者: Jack Chen
  日期: 2021-04-28
 -->
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { getThemeValue } from "@/utils/theme_utils";
 export default {
   data() {
     return {
@@ -21,22 +23,45 @@ export default {
       timer: null, // 定时器的标识
     };
   },
+  created() {
+    // 在组件创建完成之后，进行回调函数的注册
+    this.$socket.registerCallBack("sellerData", this.getData);
+  },
   mounted() {
     this.initChart();
-    this.getData();
-    window.addEventListener('resize', this.screenAdapter);
+    // this.getData();
+    this.$socket.send({
+      action: "getData",
+      socketType: "sellerData",
+      chartName: "seller",
+      value: "",
+    });
+    window.addEventListener("resize", this.screenAdapter);
     // 在页面加载完成的时候，主动进行屏幕的适配
     this.screenAdapter();
+    // console.log(this.theme);
   },
   destroyed() {
     clearInterval(this.timer);
     // 在组件销毁时，需将监听器注销
-    window.removeEventListener('resize', this.screenAdapter)
+    window.removeEventListener("resize", this.screenAdapter);
+    this.$socket.unRegisterCallBack("sellerData");
+  },
+  computed: {
+    ...mapState(["theme"]),
+  },
+  watch: {
+    theme() {
+      this.myChart.dispose(); // 销毁当前的图表
+      this.initChart(); // 重新以最新的主题名称初始化图表对象
+      this.screenAdapter(); // 完成屏幕适配
+      this.updateChart(); // 更新图表展示
+    },
   },
   methods: {
     // 初始化echartsInstance对象
     initChart() {
-      this.myChart = this.$echarts.init(this.$refs.seller_ref, "dark");
+      this.myChart = this.$echarts.init(this.$refs.seller_ref, this.theme);
       // 对图表初始化配置的控制
       const initOption = {
         title: {
@@ -54,22 +79,24 @@ export default {
           bottom: "3%",
           containLabel: true, // 距离包含坐标轴上的文字
         },
+        backgroundColor: getThemeValue(this.theme).bgColor,
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "line",
-            z: 0,
-            lineStyle: {
-              width: 66,
-              color: "#2D3443",
-            },
+            type: 'shadow'
+            // type: "line",
+            // z: 0,
+            // lineStyle: {
+            //   width: 66,
+            //   color: "#2D3443",
+            // },
           },
         },
         xAxis: {
           type: "value",
         },
         yAxis: {
-          type: "category"
+          type: "category",
         },
         series: [
           {
@@ -79,7 +106,7 @@ export default {
               show: true,
               position: "right",
               textStyle: {
-                color: "#fff",
+                color: getThemeValue(this.theme).labelColor,
               },
             },
             itemStyle: {
@@ -108,7 +135,7 @@ export default {
           },
         ],
       };
-      this.myChart.setOption(initOption)
+      this.myChart.setOption(initOption);
 
       // 对图表对象进行鼠标事件的监听
       this.myChart.on("mouseover", () => {
@@ -119,9 +146,9 @@ export default {
       });
     },
     // 获取服务端的数据
-    async getData() {
-      const { data: ret } = await this.$http.get("seller");
-      console.log("获取后端数据===", ret);
+    getData(ret) {
+      // const { data: ret } = await this.$http.get("seller");
+      // console.log("获取后端数据===", ret);
       this.allData = ret;
       // 对数据排序
       this.allData.sort((a, b) => {
@@ -152,13 +179,13 @@ export default {
 
       const dataOption = {
         yAxis: {
-          data: sellerName
+          data: sellerName,
         },
         series: [
           {
-            data: sellerValue
-          }
-        ]
+            data: sellerValue,
+          },
+        ],
       };
 
       this.myChart.setOption(dataOption);
@@ -177,33 +204,33 @@ export default {
     },
     // 当浏览器的大小发生变化时，会调用的方法，来完成屏幕的适配
     screenAdapter() {
-        const titleFontSize = this.$refs.seller_ref.offsetWidth / 100 * 3.6;
-        const adapterOption = {
-            title: {
-                textStyle: {
-                    fontSize: titleFontSize
-                }
+      const titleFontSize = (this.$refs.seller_ref.offsetWidth / 100) * 3.6;
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize,
+          },
+        },
+        tooltip: {
+          axisPointer: {
+            lineStyle: {
+              width: titleFontSize,
             },
-            tooltip: {
-                axisPointer: {
-                    lineStyle: {
-                        width: titleFontSize
-                    }
-                }
+          },
+        },
+        series: [
+          {
+            barWidth: titleFontSize,
+            itemStyle: {
+              borderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0],
             },
-            series: [
-                {
-                    barWidth: titleFontSize,
-                    itemStyle: {
-                        borderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0]
-                    }
-                }
-            ]
-        }
-        this.myChart.setOption(adapterOption);
-        // 手动调用图表对象的resize才能生效
-        this.myChart.resize();
-    }
+          },
+        ],
+      };
+      this.myChart.setOption(adapterOption);
+      // 手动调用图表对象的resize才能生效
+      this.myChart.resize();
+    },
   },
 };
 </script>
