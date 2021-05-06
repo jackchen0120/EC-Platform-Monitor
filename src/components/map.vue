@@ -53,6 +53,7 @@ export default {
     btnStyle() {
       return {
         fontSize: this.titleFontSize / 2 + "px",
+        color: getThemeValue(this.theme).labelColor
       };
     },
   },
@@ -199,7 +200,6 @@ export default {
   left: 24%;
   top: 5%;
   z-index: 999;
-  color: #fff;
   cursor: pointer;
 }
 </style>
