@@ -62,7 +62,7 @@
 
 # 在线教程
 
-[整理汇总一系列数据可视化大屏项目资源从入门、实战、进阶到全栈](https://juejin.cn/post/6960125126008389669)
+[整理汇总一系列数据可视化大屏项目资源从入门、实战、进阶到全栈](https://54web3.cc/docs/index.html#manual/Full-stack-echarts)
 
 
 # 下载安装依赖
